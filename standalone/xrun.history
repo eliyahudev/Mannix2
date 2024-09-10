@@ -1,0 +1,15 @@
+s1(10Sep2024:11:03:51):  xrun -sv rtl/gemm.sv 
+s2(10Sep2024:11:17:51):  xrun -sv rtl/gemm.sv 
+s3(10Sep2024:11:18:04):  xrun -sv rtl/gemm.sv tb/gemm_tb.sv 
+s4(10Sep2024:11:22:26):  xrun -sv rtl/gemm.sv tb/gemm_tb.sv -gui -debug 
+s5(10Sep2024:11:46:04):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s6(10Sep2024:17:04:57):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s7(10Sep2024:17:43:52):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s8(10Sep2024:17:44:18):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s9(10Sep2024:17:45:01):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s10(10Sep2024:17:45:39):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s11(10Sep2024:17:46:02):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s12(10Sep2024:17:47:43):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s13(10Sep2024:17:53:37):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s14(10Sep2024:17:54:54):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 
+s15(10Sep2024:17:56:43):  xrun -sv rtl/gemm.sv rtl/adder_tree.sv tb/gemm_tb.sv 

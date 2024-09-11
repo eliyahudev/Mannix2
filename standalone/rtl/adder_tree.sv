@@ -1,15 +1,15 @@
 module adder_tree_16 #(
     parameter WIDTH = 16  // Bit-width of each input
 )(
-    input wire [WIDTH-1:0] inputs [15:0], // 16-element vector input
-    output wire [WIDTH-1:0] sum            // Output sum
+    input wire signed [WIDTH-1:0] inputs [15:0], // 16-element vector input
+    output wire signed [WIDTH-1:0] sum            // Output sum
 );
 
     // Internal wires
-    wire [WIDTH-1:0] level1 [7:0];
-    wire [WIDTH-1:0] level2 [3:0];
-    wire [WIDTH-1:0] level3 [1:0];
-    wire [WIDTH-1:0] level4;
+    wire signed [WIDTH-1:0] level1 [7:0];
+    wire signed [WIDTH-1:0] level2 [3:0];
+    wire signed [WIDTH-1:0] level3 [1:0];
+    wire signed [WIDTH-1:0] level4;
 
     // Level 1: Pairwise addition
     genvar i;

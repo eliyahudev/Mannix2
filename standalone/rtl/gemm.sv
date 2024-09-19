@@ -1,13 +1,12 @@
-module mac_vector_adder_tree #(parameter N = 8, WIDTH = 16)(
+module mac_vector_adder_tree #(parameter WIDTH = 16, N = 8)(
     input clk,
     input rst,
-    input signed [WIDTH-1:0] vector_A [0:N-1],  // Input vector A
-    input signed [WIDTH-1:0] vector_B [0:N-1],  // Input vector B
+    input signed [0:N-1][WIDTH-1:0] vector_A ,  // Input vector A
+    input signed [0:N-1][WIDTH-1:0] vector_B ,  // Input vector B
     output reg signed [WIDTH*2-1:0] result      // Output result
 );
 
-logic signed [WIDTH*2-1:0] mul [0:N-1];  // Intermediate multiplication results
-logic signed [WIDTH*2-1:0] sum [0:N/2-1]; // Adder tree summation
+logic signed [0:N-1][WIDTH*2-1:0] mul ;  // Intermediate multiplication results
 
 integer i;
 

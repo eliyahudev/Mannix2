@@ -49,7 +49,7 @@ endmodule
 module adder_tree_8 #(
     parameter WIDTH = 16  // Bit-width of each input
 )(
-    input logic signed [2*WIDTH-1:0] inputs [0:7], // 8-element vector input
+    input logic signed [0:7][2*WIDTH-1:0] inputs , // 8-element vector input
     output logic signed [2*WIDTH-1:0] sum            // Output sum
 );
 

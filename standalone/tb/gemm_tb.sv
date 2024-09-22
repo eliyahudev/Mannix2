@@ -5,7 +5,7 @@
 // monitor - 
 // register model - 
 
-module tb_mac_vector_adder_tree();
+module tb_mac_vector_adder_tree;
 
     parameter N = 8;          // Vector size
     parameter WIDTH = 16;     // Bit width of each element in the vector
@@ -15,7 +15,9 @@ module tb_mac_vector_adder_tree();
     reg signed  [NUM_MACS-1:0][0:N-1][WIDTH-1:0] vector_A ; // Input vector A
     reg signed  [NUM_MACS-1:0][0:N-1][WIDTH-1:0] vector_B ; // Input vector B
     wire signed [WIDTH*2-1:0] result;        // Output result
-
+    reg [31:0] counter ; // Counter output for monitoring //ADD
+    reg done ;// Signal indicating process completion //ADD
+    reg start;
     // // Instantiate the MAC vector adder tree
     // mac_vector_adder_tree #(WIDTH, N) mac_inst (
     //     .clk(clk),
@@ -25,12 +27,16 @@ module tb_mac_vector_adder_tree();
     //     .result(result)
     // );
 
-    vec_mac #(N, WIDTH) mac_inst (
+    vec_mac #(N, WIDTH, NUM_MACS) mac_inst (  //changeADD
         .clk(clk),
         .rst(rst),
+        .start(start),
+        .row_size(32),
         .vector_A(vector_A),
         .vector_B(vector_B),
-        .result(result)
+        .result(result),
+        // .counter(counter) ,  //ADD
+        .done(done)  //ADD
     );
 
     // Clock generation
@@ -42,8 +48,9 @@ module tb_mac_vector_adder_tree();
     initial begin
         // Initialize clock and reset
         clk = 0;
-        rst = 1;
-        #10 rst = 0;
+        rst = 0;
+        start = 0;
+        #10 rst = 1;
 
         // Apply input vectors A and B
         vector_A[0][0] = 16'sd5; vector_B[0][0] = 16'sd3;  // A[0] * B[0] = x += 5 * 3
@@ -68,12 +75,28 @@ module tb_mac_vector_adder_tree();
 
         // Wait for the result to be computed
         #100;
+        #10 start = 1;
+        #10 start = 0;
 
         // Display the final result
         $display("Final MAC result: %d", result);
 
         // End simulation
+        // #10 $finish;
+        @(done);
+        // #10 start = 1; // this works
+        start = 1;     // this doesn't work
+        #10 start = 0;
+        @(done);
+
         #10 $finish;
+
     end
 
+    // always @(posedge clk) begin
+    //     if (rst) begin
+    //         if(done)
+    //             #10 $finish;
+    //     end
+    // end
 endmodule

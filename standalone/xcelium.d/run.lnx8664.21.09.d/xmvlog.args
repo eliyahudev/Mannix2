@@ -6,8 +6,9 @@
 ./xcelium.d/run.lnx8664.21.09.d
 -RUNMODE
 -sv
-rtl/gemm.sv
 rtl/adder_tree.sv
+rtl/gemm.sv
+rtl/vector_mac_tree.sv
 tb/gemm_tb.sv
 -CDSLIB
 ./xcelium.d/run.lnx8664.21.09.d/cdsrun.lib

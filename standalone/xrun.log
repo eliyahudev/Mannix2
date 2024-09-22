@@ -1,10 +1,14 @@
 xrun(64): 21.09-s007: (c) Copyright 1995-2022 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	21.09-s007: Started on Sep 10, 2024 at 17:56:42 UTC
+TOOL:	xrun(64)	21.09-s007: Started on Sep 22, 2024 at 12:35:31 UTC
 xrun
 	-sv
-	rtl/gemm.sv
 	rtl/adder_tree.sv
+	rtl/gemm.sv
+	rtl/vector_mac_tree.sv
 	tb/gemm_tb.sv
+	-debug
+	-gu
+	-s
 SOFTINCLUDE $XPEDION/aa/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib Invalid environment variable ''.
@@ -29,9 +33,9 @@ xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-Recompiling... reason: file './rtl/adder_tree.sv' is newer than expected.
-	expected: Tue Sep 10 17:47:37 2024
-	actual:   Tue Sep 10 17:56:31 2024
+Recompiling... reason: file './tb/gemm_tb.sv' is newer than expected.
+	expected: Sun Sep 22 12:34:58 2024
+	actual:   Sun Sep 22 12:35:23 2024
 SOFTINCLUDE $XPEDION/aa/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib Invalid environment variable ''.
@@ -44,11 +48,8 @@ xmvlog: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.l
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmvlog: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-file: rtl/gemm.sv
-	module worklib.mac_vector_adder_tree:sv
-		errors: 0, warnings: 0
-file: rtl/adder_tree.sv
-	module worklib.adder_tree_8:sv
+file: tb/gemm_tb.sv
+	module worklib.tb_mac_vector_adder_tree:sv
 		errors: 0, warnings: 0
 	Total errors/warnings found outside modules and primitives:
 		errors: 0, warnings: 2
@@ -76,6 +77,15 @@ xmelab: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.l
 		adder_tree_16
 		tb_mac_vector_adder_tree
 xmelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+        .result(result),
+                     |
+xmelab: *W,CUVMPW (./tb/gemm_tb.sv,37|21): port sizes differ in port connection(32/16) for the instance(tb_mac_vector_adder_tree) .
+    .result(vmac1_result)      // Output result
+                       |
+xmelab: *W,CUVMPW (./rtl/vector_mac_tree.sv,32|23): port sizes differ in port connection(16/32) for the instance(tb_mac_vector_adder_tree.mac_inst) .
+    .result(vmac2_result)      // Output result
+                       |
+xmelab: *W,CUVMPW (./rtl/vector_mac_tree.sv,40|23): port sizes differ in port connection(16/32) for the instance(tb_mac_vector_adder_tree.mac_inst) .
 	Building instance overlay tables: .................... Done
 	Generating native compiled code:
 SOFTINCLUDE $XPEDION/aa/cds.lib
@@ -84,24 +94,21 @@ xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cd
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-		worklib.mac_vector_adder_tree:sv <0x03a621e4>
-			streams:   5, words:  6539
-		worklib.tb_mac_vector_adder_tree:sv <0x04d53f1d>
-			streams:   4, words:  5888
-		worklib.adder_tree_8:sv <0x75f35893>
-			streams:   4, words:   820
+		worklib.tb_mac_vector_adder_tree:sv <0x31c5f77d>
+			streams:   9, words: 16363
 	Building instance specific data structures.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
-		              Instances  Unique
-		Modules:              4       4
-		Registers:           12      12
-		Scalar wires:         2       -
-		Vectored wires:      30       -
-		Always blocks:        2       2
-		Initial blocks:       1       1
-		Cont. assignments:    8       9
-		Pseudo assignments:   4       4
+		               Instances  Unique
+		Modules:               7       5
+		Registers:            24      19
+		Scalar wires:         21       -
+		Expanded wires:      592       5
+		Vectored wires:       55       -
+		Always blocks:         5       4
+		Initial blocks:        1       1
+		Cont. assignments:    32       9
+		Pseudo assignments:   11       9
 	Writing initial simulation snapshot: worklib.adder_tree_16:sv
 SOFTINCLUDE $XPEDION/aa/cds.lib
 |
@@ -109,12 +116,20 @@ xmsim: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.li
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmsim: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-Loading snapshot worklib.adder_tree_16:sv .................... Done
+xmsim: *W,NOMTDGUI: Multi-Threaded Dumping is disabled for interactive debug mode.
 xmsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+xcelium> 
 xcelium> source /apps/cadence/XCELIUM/21.09.007/tools/xcelium/files/xmsimrc
+xcelium> 
+-------------------------------------
+Relinquished control to SimVision...
+# Restoring simulation environment...
+xcelium> input -quiet .reinvoke.sim
+xcelium> file delete .reinvoke.sim
 xcelium> run
-Final MAC result:         116
-Simulation complete via $finish(1) at time 120 NS + 0
-./tb/gemm_tb.sv:50         #10 $finish;
+Final MAC result:           Z
+Simulation complete via $finish(1) at time 175 NS + 0
+./tb/gemm_tb.sv:91         #10 $finish;
+xcelium> ^C
 xcelium> exit
-TOOL:	xrun(64)	21.09-s007: Exiting on Sep 10, 2024 at 17:56:45 UTC  (total: 00:00:03)
+TOOL:	xrun(64)	21.09-s007: Exiting on Sep 22, 2024 at 12:38:21 UTC  (total: 00:02:50)

@@ -3,6 +3,10 @@
 // Do not modify this file
 //
 -sv
-rtl/gemm.sv
 rtl/adder_tree.sv
+rtl/gemm.sv
+rtl/vector_mac_tree.sv
 tb/gemm_tb.sv
+-debug
+-gu
+-s

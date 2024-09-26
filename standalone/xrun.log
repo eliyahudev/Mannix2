@@ -1,5 +1,5 @@
 xrun(64): 21.09-s007: (c) Copyright 1995-2022 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	21.09-s007: Started on Sep 22, 2024 at 12:35:31 UTC
+TOOL:	xrun(64)	21.09-s007: Started on Sep 22, 2024 at 19:51:43 UTC
 xrun
 	-sv
 	rtl/adder_tree.sv
@@ -33,9 +33,9 @@ xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-Recompiling... reason: file './tb/gemm_tb.sv' is newer than expected.
-	expected: Sun Sep 22 12:34:58 2024
-	actual:   Sun Sep 22 12:35:23 2024
+Recompiling... reason: file './rtl/vector_mac_tree.sv' is newer than expected.
+	expected: Sun Sep 22 19:50:27 2024
+	actual:   Sun Sep 22 19:51:35 2024
 SOFTINCLUDE $XPEDION/aa/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib Invalid environment variable ''.
@@ -48,8 +48,8 @@ xmvlog: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.l
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmvlog: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-file: tb/gemm_tb.sv
-	module worklib.tb_mac_vector_adder_tree:sv
+file: rtl/vector_mac_tree.sv
+	module worklib.vec_mac:sv
 		errors: 0, warnings: 0
 	Total errors/warnings found outside modules and primitives:
 		errors: 0, warnings: 2
@@ -94,8 +94,8 @@ xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cd
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-		worklib.tb_mac_vector_adder_tree:sv <0x31c5f77d>
-			streams:   9, words: 16363
+		worklib.vec_mac:sv <0x5cc370fc>
+			streams:   5, words:  3324
 	Building instance specific data structures.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
@@ -128,8 +128,6 @@ xcelium> input -quiet .reinvoke.sim
 xcelium> file delete .reinvoke.sim
 xcelium> run
 Final MAC result:           Z
-Simulation complete via $finish(1) at time 175 NS + 0
-./tb/gemm_tb.sv:91         #10 $finish;
-xcelium> ^C
-xcelium> exit
-TOOL:	xrun(64)	21.09-s007: Exiting on Sep 22, 2024 at 12:38:21 UTC  (total: 00:02:50)
+Simulation complete via $finish(1) at time 246 NS + 0
+./tb/gemm_tb.sv:92         #100 $finish;
+xcelium> 

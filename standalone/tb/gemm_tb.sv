@@ -84,12 +84,12 @@ module tb_mac_vector_adder_tree;
         // End simulation
         // #10 $finish;
         @(done);
-        // #10 start = 1; // this works
+        //#10 start = 1; // this works
         start = 1;     // this doesn't work
         #10 start = 0;
         @(done);
 
-        #10 $finish;
+        #100 $finish;
 
     end
 

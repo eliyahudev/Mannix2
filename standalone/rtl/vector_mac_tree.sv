@@ -54,6 +54,10 @@ always @(*) begin
             end 
         end
         SUM: begin
+            if(counter == 0)begin
+                result_r = 0;
+            end
+            #1
             // if (counter >= 80) begin
             //     done = 1;
             //     //counter = 0;  // Reset counter 
@@ -62,8 +66,12 @@ always @(*) begin
             result = result_r + (vmac1_result + vmac2_result);
             counter = counter_r + 16;
             done = (counter >= row_size) ? 1 : 0;
-            next_state = (counter >= row_size) ? IDLE : SUM;
-            // end
+            next_state = ((counter >= row_size) && (start == 0)) ? IDLE : SUM;
+            if((counter >= row_size) && (start == 1)) begin
+                //result = 0;
+                counter = 0;
+                next_state = SUM;
+            end
         end    
         // DONE: begin
         //     result = 0;

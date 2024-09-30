@@ -50,51 +50,54 @@ always @(posedge clk) begin
   if (host_regs_valid_pulse[dbg_addr])
     $display("a value %0d was writen to reg %0d", host_regs[dbg_addr], dbg_addr/*the register chose*/);
 end
-assign sw_go = (|host_regs[0]) & host_regs_valid_pulse[0];
+assign sw_go = (|host_regs[8]) & host_regs_valid_pulse[8];
 
-   reg [3:0] count;          // 4-bit counter (0 to 10)
+   reg [31:0] count;          // 4-bit counter (0 to 10)
     reg [1:0] state;          // FSM state register
-
+    reg [31:0]num_row ;
+    wire row_done;
     // State encoding
     localparam IDLE    = 2'b00;
     localparam COUNT   = 2'b01;
     localparam FINISH  = 2'b10;
 
-always_comb begin
-  host_regs_data_out[0] = 32'd0;
-  case (state)
-    IDLE:
-      host_regs_valid_out[0] = 0;
-    COUNT:
-      host_regs_valid_out[0] = 0;
-    FINISH: begin
-      host_regs_valid_out[0] = 1;
-      host_regs_data_out[0]  = 32'd1;
-    end
-    default: begin
-      host_regs_valid_out[0] = 0;
-    end
-  endcase   
-end
+// TODO connect to the mac block and delete this line
+// this line acting like every clock cycle one row has finished
+assign row_done = 1;  
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         state <= IDLE;
         count <= 4'd0;
     end else begin
+        host_regs_data_out[1] <= 32'd0;
         case (state)
             IDLE: begin
                 // host_regs_valid_out <= 0;
+                host_regs_valid_out[1] = 0;
                 if (sw_go) begin
+                    $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
+                    $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
+                    $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
+                    $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
+                    $display("host_regs_valid_out[8]: %d", host_regs_valid_out[8]);
+                    $display("host_regs_valid_out[1]: %d", host_regs_valid_out[1]);
+                    $display("host_regs_data_out[1]: %d", host_regs_data_out[1]);
+                    
+                    $display("row size: %d; col size: %d", host_regs[3], host_regs[2]);
                     state <= COUNT;
                     count <= 4'd0;
                 end
             end
 
             COUNT: begin
+                host_regs_valid_out[1] = 0;
                 // host_regs_valid_out <= 0;
-                if (count < 4'd10) begin
+                $display("row size: %d; col size: %d", host_regs[3], host_regs[2]);
+                num_row = host_regs[3];
+                if (count < host_regs[3]) begin //Oz&Eliyahu : work only when host_regs[3] =10.....
                     count <= count + 1;
+                     $display("counter: %d", count);
                 end else begin
                     state <= FINISH;
                 end
@@ -103,6 +106,8 @@ always @(posedge clk or negedge rst_n) begin
             FINISH: begin
                 $display($time," VERILOG MSG: a test passed") ;
                 // host_regs_valid_out    <=  1;
+                host_regs_valid_out[1] <= 1;
+                host_regs_data_out[1]  <= 32'd1;
                 state <= IDLE;
             end
 
@@ -111,7 +116,39 @@ always @(posedge clk or negedge rst_n) begin
     end
 end
 
-  // bf_exp exp(
+// always_comb begin
+//   case (state)
+//     IDLE:
+//       host_regs_valid_out[1] = 0;
+//     COUNT:
+//       host_regs_valid_out[1] = 0;
+//     FINISH: begin
+//       host_regs_valid_out[1] = 1;
+//       host_regs_data_out[1]  = 32'd1;
+//     end
+//     default: begin
+//       host_regs_valid_out[1] = 0;
+//     end
+//   endcase   
+// end
+
+
+
+
+// vec_mac #(
+//     parameter WIDTH = 16, N = 8, NUM_MACS = 2
+// ) (
+//     .clk(clk),
+//     .rst(rst),
+//     .start(start),
+//     .row_size(),
+//     .vector_A() ,  // Input vector A
+//     .vector_B() ,  // Input vector B
+//     .result(),
+//     .done(row_done) // Signal indicating process completion //ADD
+// );
+
+  // Mac mac(
   //   .clk(clk),      // inport
   //   .rst_n(rst_n),    // inport
   //   .start(host_regs[0]),    // inport

@@ -31,6 +31,16 @@ module xbox_xlr_dmy1 #(parameter NUM_MEMS=1,LOG2_LINES_PER_MEM=4)  (
 
 // ILAAD: Inference-Driven Low-latency Autonomous AI Devices
 
+// A system verilog macro to calculate the relative memory address (in hardware terms) of an agreed location with the software
+`define SPACE_SIZE_PER_MEM 1024 // Reserved space per memory , regardless of actual available size
+`define XBOX_TCM_OFFSET_ADDR(mem_idx,line_idx,word_idx) ((mem_idx*`SPACE_SIZE_PER_MEM*32)+(line_idx*32)+(word_idx*4))
+
+enum {MEM0=0,MEM1=1} mem_idx ; // xbox memories reference indexing
+
+// The accelerator sense the command address access by the software as a trigger to start acting. 
+assign trig_detected = trig_soc_xmem_wr && (trig_soc_xmem_wr_addr==`XBOX_TCM_OFFSET_ADDR(1,255,0)) ; // SW Writing to CMD word in TCM
+
+
 logic [31:0][31:0] host_regs_data_out;          // regs accelerator write data,  this is what SW will read when accessing the register
                                                 // provided that the register specific host_regs_valid_out is asserted
 logic       [31:0] host_regs_valid_out;         // reg accelerator (one per register)
@@ -112,16 +122,16 @@ always @(posedge clk or negedge rst_n) begin
                 // ** Notice ** that the next cycle is a read request and
                 // the data would by ready only one cycle after!
                 // set mem 0
-                xlr_mem_addr[0] <= 0;
-                xlr_mem_be[0][0] <= 1;
-                xlr_mem_be[0][1] <= 1;
-                xlr_mem_rd[0] <= 1;
+                xlr_mem_addr[MEM0] <= 0;
+                xlr_mem_be[MEM0][0] <= 1;
+                xlr_mem_be[MEM0][1] <= 1;
+                xlr_mem_rd[MEM0] <= 1;
 
                 // set mem 1
-                xlr_mem_addr[1] <= 0;
-                xlr_mem_be[1][0] <= 1;
-                xlr_mem_be[1][1] <= 1;
-                xlr_mem_rd[1] <= 1;
+                xlr_mem_addr[MEM1] <= 0;
+                xlr_mem_be[MEM1][0] <= 1;
+                xlr_mem_be[MEM1][1] <= 1;
+                xlr_mem_rd[MEM1] <= 1;
 
                 // host_regs_valid_out <= 0;
                 $display("row size: %d; col size: %d", host_regs[3], host_regs[2]);

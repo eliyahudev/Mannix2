@@ -5,4 +5,4 @@ $PULP_ENV/src/ips/xbox/xbox_xlr_aa.sv
 $PULP_ENV/src/ips/xbox/xbox_xlr_dmy1.sv
 $PULP_ENV/src/ips/xbox/xbox_xlr_dmy2.sv
 $PULP_ENV/src/ips/xbox/xbox_xlr_dmy3.sv
-// $PULP_ENV/src/ips/xbox/bf_exp.sv
+$PULP_ENV/src/ips/xbox/mac/*.sv

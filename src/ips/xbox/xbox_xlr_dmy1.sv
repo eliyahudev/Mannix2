@@ -36,11 +36,16 @@ logic [31:0][31:0] host_regs_data_out;          // regs accelerator write data, 
 logic       [31:0] host_regs_valid_out;         // reg accelerator (one per register)
 
 // TMP placeholder
-assign xlr_mem_addr   = 0 ;
-assign xlr_mem_wdata  = 0 ;
-assign xlr_mem_be     = 0 ;
-assign xlr_mem_rd     = 0 ;
-assign xlr_mem_wr     = 0 ;
+// assign xlr_mem_addr   = 0 ;
+// assign xlr_mem_wdata  = 0 ;
+// assign xlr_mem_be     = 0 ;
+// assign xlr_mem_rd     = 0 ;
+// assign xlr_mem_wr     = 0 ;
+
+// parameters
+parameter N = 8;          // Vector size
+parameter WIDTH = 16;     // Bit width of each element in the vector
+parameter NUM_MACS = 2;
 
 
 // assign host_regs_data_out  = 0 ; // Currently not in use for this accelerator                      
@@ -70,11 +75,11 @@ always @(posedge clk or negedge rst_n) begin
         state <= IDLE;
         count <= 4'd0;
     end else begin
-        host_regs_data_out[1] <= 32'd0;
         case (state)
             IDLE: begin
                 // host_regs_valid_out <= 0;
-                host_regs_valid_out[1] = 0;
+                host_regs_data_out[0] <= host_regs_data_out[0];
+                host_regs_valid_out[0] = host_regs_valid_out[0];
                 if (sw_go) begin
                     $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
                     $display("!@#$^&*(&$##@@#$$$$$####@@#$$$#@@#$^&(()))()()(&^^!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!):");
@@ -91,7 +96,8 @@ always @(posedge clk or negedge rst_n) begin
             end
 
             COUNT: begin
-                host_regs_valid_out[1] = 0;
+                host_regs_valid_out[0] = 0;
+                host_regs_data_out[0] <= 32'd0;
                 // host_regs_valid_out <= 0;
                 $display("row size: %d; col size: %d", host_regs[3], host_regs[2]);
                 num_row = host_regs[3];
@@ -100,21 +106,40 @@ always @(posedge clk or negedge rst_n) begin
                      $display("counter: %d", count);
                 end else begin
                     state <= FINISH;
+                    xlr_mem_addr[0] <= 0;
+                    xlr_mem_be[0][0] <= 1;
+                    xlr_mem_be[0][1] <= 1;
+                    xlr_mem_rd[0] <= 1;
                 end
             end
 
             FINISH: begin
                 $display($time," VERILOG MSG: a test passed") ;
+                xlr_mem_addr <= 0;
                 // host_regs_valid_out    <=  1;
-                host_regs_valid_out[1] <= 1;
-                host_regs_data_out[1]  <= 32'd1;
+                host_regs_valid_out[0] <= 1;
+                host_regs_data_out[0]  <= 32'd1;
                 state <= IDLE;
+                $display("xlr_mem_rdata[0][0] = %d",xlr_mem_rdata[0][0]);
+                $display("xlr_mem_rdata[0][1] = %d",xlr_mem_rdata[0][1]);
             end
 
             default: state <= IDLE;
         endcase
     end
 end
+
+vec_mac #(N, WIDTH, NUM_MACS) mac_inst (  //changeADD
+        .clk(clk),
+        .rst(rst),
+        // .start(start),
+        .row_size(32)
+        // .vector_A(vector_A),
+        // .vector_B(vector_B),
+        // .result(result),
+        // .counter(counter) ,  //ADD
+        // .done(done)  //ADD
+    );
 
 // always_comb begin
 //   case (state)

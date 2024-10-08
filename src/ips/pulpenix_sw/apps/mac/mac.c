@@ -20,11 +20,19 @@ int main() {
  
   // Write gpp reg #5 (currently not in use by accelerators)
   int mem_idx = 0;
-  volatile unsigned char * mem_inst_base_addr = (unsigned char *)(XBOX_MEM_BASE_ADDR) + (mem_idx*32*1024);
-  for (int i = 0; i < 16; i++) {
-    mem_inst_base_addr[i] = i+1;
+  volatile unsigned int * mem_inst_input_base_addr = (unsigned int *)(XBOX_MEM_BASE_ADDR) + (mem_idx*32*1024);
+  for (int i = 0; i < 16*4; i+=4) {
+    int val = i+1;
+    mem_inst_input_base_addr[i/4] =  ((((((i+4) << 8) + i+3) << 8) + i+2) << 8) + i+1 ;
   }
   
+  mem_idx = 1;
+  volatile unsigned int * mem_inst_wight_base_addr = (unsigned int *)(XBOX_MEM_BASE_ADDR) + (mem_idx*32*1024);
+  for (int i = 0; i < 16*4; i+=4) {
+    int val = i+2;
+    mem_inst_wight_base_addr[i/4] =  ((((((i+4) << 8) + i+3) << 8) + i+2) << 8) + i+1 ;
+  }
+
 
   gpp_reg_idx = 8 ;
   gpp_reg_addr_start = (volatile unsigned int *) (XBOX_BASE_ADDR+(gpp_reg_idx*4)) ;

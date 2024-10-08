@@ -74,9 +74,17 @@ always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         state <= IDLE;
         count <= 4'd0;
+        xlr_mem_addr <= 0;
+        xlr_mem_be <= 0;
+        xlr_mem_be <= 0;
+        xlr_mem_rd <= 0;
     end else begin
         case (state)
             IDLE: begin
+                xlr_mem_addr <= 0;
+                xlr_mem_be <= 0;
+                xlr_mem_be <= 0;
+                xlr_mem_rd <= 0;
                 // host_regs_valid_out <= 0;
                 host_regs_data_out[0] <= host_regs_data_out[0];
                 host_regs_valid_out[0] = host_regs_valid_out[0];
@@ -98,6 +106,23 @@ always @(posedge clk or negedge rst_n) begin
             COUNT: begin
                 host_regs_valid_out[0] = 0;
                 host_regs_data_out[0] <= 32'd0;
+
+                // For project students
+                // read data from the accelerator memory. 
+                // ** Notice ** that the next cycle is a read request and
+                // the data would by ready only one cycle after!
+                // set mem 0
+                xlr_mem_addr[0] <= 0;
+                xlr_mem_be[0][0] <= 1;
+                xlr_mem_be[0][1] <= 1;
+                xlr_mem_rd[0] <= 1;
+
+                // set mem 1
+                xlr_mem_addr[1] <= 0;
+                xlr_mem_be[1][0] <= 1;
+                xlr_mem_be[1][1] <= 1;
+                xlr_mem_rd[1] <= 1;
+
                 // host_regs_valid_out <= 0;
                 $display("row size: %d; col size: %d", host_regs[3], host_regs[2]);
                 num_row = host_regs[3];
@@ -106,10 +131,7 @@ always @(posedge clk or negedge rst_n) begin
                      $display("counter: %d", count);
                 end else begin
                     state <= FINISH;
-                    xlr_mem_addr[0] <= 0;
-                    xlr_mem_be[0][0] <= 1;
-                    xlr_mem_be[0][1] <= 1;
-                    xlr_mem_rd[0] <= 1;
+
                 end
             end
 
@@ -120,8 +142,12 @@ always @(posedge clk or negedge rst_n) begin
                 host_regs_valid_out[0] <= 1;
                 host_regs_data_out[0]  <= 32'd1;
                 state <= IDLE;
-                $display("xlr_mem_rdata[0][0] = %d",xlr_mem_rdata[0][0]);
-                $display("xlr_mem_rdata[0][1] = %d",xlr_mem_rdata[0][1]);
+                // mem 0
+                $display("xlr_mem_rdata[0][0] = %h",xlr_mem_rdata[0][0]);
+                $display("xlr_mem_rdata[0][1] = %h",xlr_mem_rdata[0][1]);
+                // mem 1
+                $display("xlr_mem_rdata[1][0] = %h",xlr_mem_rdata[1][0]);
+                $display("xlr_mem_rdata[1][1] = %h",xlr_mem_rdata[1][1]);
             end
 
             default: state <= IDLE;

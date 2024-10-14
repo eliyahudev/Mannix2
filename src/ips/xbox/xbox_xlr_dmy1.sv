@@ -70,6 +70,7 @@ assign sw_go = (|host_regs[8]) & host_regs_valid_pulse[8];
    reg [31:0] count;          // 4-bit counter (0 to 10)
     reg [1:0] state;          // FSM state register
     reg [31:0]num_row ;
+    reg row_start;
     wire row_done;
     // State encoding
     localparam IDLE    = 2'b00;
@@ -89,6 +90,7 @@ always @(posedge clk or negedge rst_n) begin
         xlr_mem_be <= 0;
         xlr_mem_rd <= 0;
     end else begin
+        row_start <= 0;
         case (state)
             IDLE: begin
                 xlr_mem_addr <= 0;
@@ -123,14 +125,14 @@ always @(posedge clk or negedge rst_n) begin
                 // the data would by ready only one cycle after!
                 // set mem 0
                 xlr_mem_addr[MEM0] <= 0;
-                xlr_mem_be[MEM0][0] <= 1;
-                xlr_mem_be[MEM0][1] <= 1;
+                xlr_mem_be[MEM0] <= 32'hffffffff;
+                // xlr_mem_be[MEM0][1] <= 1;
                 xlr_mem_rd[MEM0] <= 1;
 
                 // set mem 1
                 xlr_mem_addr[MEM1] <= 0;
-                xlr_mem_be[MEM1][0] <= 1;
-                xlr_mem_be[MEM1][1] <= 1;
+                xlr_mem_be[MEM1] <= 32'hffffffff;
+                // xlr_mem_be[MEM1][1] <= 1;
                 xlr_mem_rd[MEM1] <= 1;
 
                 // host_regs_valid_out <= 0;
@@ -158,6 +160,7 @@ always @(posedge clk or negedge rst_n) begin
                 // mem 1
                 $display("xlr_mem_rdata[1][0] = %h",xlr_mem_rdata[1][0]);
                 $display("xlr_mem_rdata[1][1] = %h",xlr_mem_rdata[1][1]);
+                row_start <= 1;
             end
 
             default: state <= IDLE;
@@ -167,15 +170,18 @@ end
 
 vec_mac #(N, WIDTH, NUM_MACS) mac_inst (  //changeADD
         .clk(clk),
-        .rst(rst),
-        // .start(start),
-        .row_size(32)
-        // .vector_A(vector_A),
-        // .vector_B(vector_B),
+        .rst(rst_n),
+        .start(row_start),
+        .row_size(32),
+        .vector_A(xlr_mem_rdata[MEM0]),
+        .vector_B(xlr_mem_rdata[MEM1])
         // .result(result),
         // .counter(counter) ,  //ADD
         // .done(done)  //ADD
     );
+
+// 16 elements of 8 bits
+// 8 elements of 16 bits
 
 // always_comb begin
 //   case (state)

@@ -100,3 +100,7 @@ s99(22Sep2024:19:48:26):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_
 s100(22Sep2024:19:49:28):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
 s101(22Sep2024:19:50:38):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
 s102(22Sep2024:19:51:44):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
+s103(26Sep2024:18:17:44):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
+s104(26Sep2024:18:18:47):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
+s105(26Sep2024:18:27:40):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 
+s106(26Sep2024:18:31:11):  xrun -sv rtl/adder_tree.sv rtl/gemm.sv rtl/vector_mac_tree.sv tb/gemm_tb.sv -debug -gu -s 

@@ -1,5 +1,5 @@
 xrun(64): 21.09-s007: (c) Copyright 1995-2022 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	21.09-s007: Started on Sep 22, 2024 at 19:51:43 UTC
+TOOL:	xrun(64)	21.09-s007: Started on Sep 26, 2024 at 18:31:11 UTC
 xrun
 	-sv
 	rtl/adder_tree.sv
@@ -34,8 +34,8 @@ SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
 Recompiling... reason: file './rtl/vector_mac_tree.sv' is newer than expected.
-	expected: Sun Sep 22 19:50:27 2024
-	actual:   Sun Sep 22 19:51:35 2024
+	expected: Thu Sep 26 18:23:23 2024
+	actual:   Thu Sep 26 18:30:59 2024
 SOFTINCLUDE $XPEDION/aa/cds.lib
 |
 xrun: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cds.lib Invalid environment variable ''.
@@ -94,8 +94,8 @@ xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,10): cd
 SOFTINCLUDE $EMXHOME/emxinterface/cds.lib
 |
 xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cds.lib Invalid environment variable ''.
-		worklib.vec_mac:sv <0x5cc370fc>
-			streams:   5, words:  3324
+		worklib.vec_mac:sv <0x037aa247>
+			streams:   7, words:  4186
 	Building instance specific data structures.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
@@ -104,10 +104,10 @@ xmvlog_cg: *W,DLCVAR (/apps/cadence/IC/6.18.350/tools/dfII/local/cds.lib,12): cd
 		Registers:            24      19
 		Scalar wires:         21       -
 		Expanded wires:      592       5
-		Vectored wires:       55       -
+		Vectored wires:       57       -
 		Always blocks:         5       4
 		Initial blocks:        1       1
-		Cont. assignments:    32       9
+		Cont. assignments:    34      11
 		Pseudo assignments:   11       9
 	Writing initial simulation snapshot: worklib.adder_tree_16:sv
 SOFTINCLUDE $XPEDION/aa/cds.lib
@@ -128,6 +128,8 @@ xcelium> input -quiet .reinvoke.sim
 xcelium> file delete .reinvoke.sim
 xcelium> run
 Final MAC result:           Z
-Simulation complete via $finish(1) at time 246 NS + 0
+Simulation complete via $finish(1) at time 245 NS + 0
 ./tb/gemm_tb.sv:92         #100 $finish;
-xcelium> 
+xcelium> ^C
+xcelium> exit
+TOOL:	xrun(64)	21.09-s007: Exiting on Sep 26, 2024 at 18:47:30 UTC  (total: 00:16:19)
